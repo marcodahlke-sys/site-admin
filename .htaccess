@@ -1,0 +1,14 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Nur .env schützen, .env_template soll erreichbar bleiben
+RewriteRule ^\.env$ - [F,L]
+
+# Existierende Dateien/Ordner direkt ausliefern
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Front Controller
+RewriteRule ^ index.php [QSA,L]

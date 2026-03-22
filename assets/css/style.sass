@@ -1,0 +1,514 @@
+$dark-bg: #101217
+$dark-bg-soft: #171b23
+$dark-card: #1d2330
+$dark-card-2: #242c3b
+$dark-text: #eef2f7
+$dark-muted: #a9b3c3
+$dark-border: #303a4d
+$dark-accent: #4f8cff
+$dark-accent-hover: #3d78e8
+$dark-danger: #d94d5f
+$dark-danger-hover: #c53d4f
+$dark-success-bg: #153924
+$dark-success-border: #2a6c45
+$dark-error-bg: #3c1820
+$dark-error-border: #803040
+$dark-shadow: 0 16px 40px rgba(0, 0, 0, 0.22)
+
+$light-bg: #f3f5f9
+$light-bg-soft: #ffffff
+$light-card: #ffffff
+$light-card-2: #f7f9fc
+$light-text: #172031
+$light-muted: #5b6678
+$light-border: #d7deea
+$light-accent: #356ce0
+$light-accent-hover: #285bd0
+$light-danger: #d24557
+$light-danger-hover: #bd3648
+$light-success-bg: #e8f8ee
+$light-success-border: #8fd1a6
+$light-error-bg: #fdecef
+$light-error-border: #e2a1ab
+$light-shadow: 0 16px 40px rgba(30, 52, 87, 0.08)
+
+$radius-sm: 12px
+$radius-md: 14px
+$radius-lg: 16px
+$radius-xl: 18px
+$transition-default: 0.2s ease
+
+=theme-vars($bg, $bg-soft, $card, $card-2, $text, $muted, $border, $accent, $accent-hover, $danger, $danger-hover, $success-bg, $success-border, $error-bg, $error-border, $shadow)
+    --bg: #{$bg}
+    --bg-soft: #{$bg-soft}
+    --card: #{$card}
+    --card-2: #{$card-2}
+    --text: #{$text}
+    --muted: #{$muted}
+    --border: #{$border}
+    --accent: #{$accent}
+    --accent-hover: #{$accent-hover}
+    --danger: #{$danger}
+    --danger-hover: #{$danger-hover}
+    --success-bg: #{$success-bg}
+    --success-border: #{$success-border}
+    --error-bg: #{$error-bg}
+    --error-border: #{$error-border}
+    --shadow: #{$shadow}
+
+=button-base
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    min-height: 42px
+    padding: 0 16px
+    border: 0
+    border-radius: $radius-sm
+    font-weight: 700
+    cursor: pointer
+    transition: background $transition-default, transform $transition-default
+
+=panel-box
+    background: var(--card)
+    border: 1px solid var(--border)
+    border-radius: $radius-xl
+    box-shadow: var(--shadow)
+
+:root
+    +theme-vars($dark-bg, $dark-bg-soft, $dark-card, $dark-card-2, $dark-text, $dark-muted, $dark-border, $dark-accent, $dark-accent-hover, $dark-danger, $dark-danger-hover, $dark-success-bg, $dark-success-border, $dark-error-bg, $dark-error-border, $dark-shadow)
+
+html[data-theme="light"]
+    +theme-vars($light-bg, $light-bg-soft, $light-card, $light-card-2, $light-text, $light-muted, $light-border, $light-accent, $light-accent-hover, $light-danger, $light-danger-hover, $light-success-bg, $light-success-border, $light-error-bg, $light-error-border, $light-shadow)
+
+*
+    box-sizing: border-box
+
+html
+    font-size: 16px
+
+body
+    margin: 0
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%)
+    color: var(--text)
+    font-family: Arial, Helvetica, sans-serif
+    line-height: 1.5
+
+a
+    color: var(--accent)
+    text-decoration: none
+
+    &:hover
+        text-decoration: underline
+
+img
+    max-width: 100%
+    display: block
+
+.container
+    width: min(1380px, calc(100% - 32px))
+    margin: 0 auto
+
+.site-shell
+    min-height: 100vh
+
+.site-header
+    position: sticky
+    top: 0
+    z-index: 40
+    background: rgba(16, 18, 23, 0.85)
+    backdrop-filter: blur(12px)
+    border-bottom: 1px solid var(--border)
+
+    html[data-theme="light"] &
+        background: rgba(255, 255, 255, 0.85)
+
+.header-inner
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 24px
+    min-height: 78px
+
+.brand
+    font-size: 1.35rem
+    font-weight: 700
+    color: var(--text)
+
+.brand-subline
+    color: var(--muted)
+    font-size: 0.9rem
+
+.main-nav
+    display: flex
+    align-items: center
+    gap: 12px
+    flex-wrap: wrap
+
+.site-main
+    padding: 24px 0 50px
+
+.panel
+    +panel-box
+    padding: 22px
+    margin-bottom: 22px
+
+.narrow-panel
+    max-width: 520px
+    margin-left: auto
+    margin-right: auto
+
+.panel-header
+    display: flex
+    justify-content: space-between
+    gap: 20px
+    align-items: flex-start
+    margin-bottom: 18px
+
+    h1,
+    h2
+        margin: 0 0 6px
+        font-size: 1.5rem
+
+    p
+        margin: 0
+        color: var(--muted)
+
+.calendar-nav
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 14px
+    margin-bottom: 18px
+    flex-wrap: wrap
+
+    h2
+        margin: 0 0 6px
+        font-size: 1.5rem
+
+    p
+        margin: 0
+        color: var(--muted)
+
+.panel-actions,
+.form-actions,
+.filter-actions,
+.admin-actions
+    display: flex
+    gap: 10px
+    flex-wrap: wrap
+
+.inline-form
+    display: inline-flex
+
+.btn
+    +button-base
+    background: var(--accent)
+    color: #fff
+
+    &:hover
+        background: var(--accent-hover)
+        text-decoration: none
+        transform: translateY(-1px)
+
+.btn-secondary
+    background: transparent
+    color: var(--text)
+    border: 1px solid var(--border)
+
+    &:hover
+        background: var(--card-2)
+
+.btn-danger
+    background: var(--danger)
+
+    &:hover
+        background: var(--danger-hover)
+
+.btn-small
+    min-height: 36px
+    padding: 0 12px
+    font-size: 0.92rem
+
+.alert
+    border-radius: $radius-md
+    padding: 14px 16px
+    margin-bottom: 18px
+    border: 1px solid
+
+.alert-success
+    background: var(--success-bg)
+    border-color: var(--success-border)
+
+.alert-error
+    background: var(--error-bg)
+    border-color: var(--error-border)
+
+.form-grid
+    display: grid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+    gap: 18px
+
+.field
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+.field-full
+    grid-column: 1 / -1
+
+label
+    font-weight: 700
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
+input[type="file"],
+select,
+textarea
+    width: 100%
+    padding: 12px 14px
+    border-radius: $radius-sm
+    border: 1px solid var(--border)
+    background: var(--card-2)
+    color: var(--text)
+    font: inherit
+
+textarea
+    resize: vertical
+    min-height: 120px
+
+.checkbox-grid
+    display: grid
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))
+    gap: 10px
+
+.checkbox
+    display: inline-flex
+    align-items: center
+    gap: 10px
+    color: var(--text)
+    font-weight: 500
+
+    input
+        width: auto
+
+.filter-bar
+    display: grid
+    grid-template-columns: repeat(3, minmax(0, 1fr)) auto
+    gap: 16px
+    align-items: end
+
+.calendar
+    display: flex
+    flex-direction: column
+    gap: 10px
+
+.calendar-header
+    display: grid
+    grid-template-columns: repeat(7, minmax(0, 1fr))
+    gap: 10px
+
+.calendar-weekday
+    background: var(--card-2)
+    border: 1px solid var(--border)
+    border-radius: $radius-md
+    padding: 12px
+    text-align: center
+    font-weight: 700
+
+.calendar-grid
+    display: grid
+    grid-template-columns: repeat(7, minmax(0, 1fr))
+    gap: 10px
+
+.calendar-day
+    min-height: 220px
+    border: 1px solid var(--border)
+    background: var(--bg-soft)
+    border-radius: $radius-lg
+    padding: 12px
+    display: flex
+    flex-direction: column
+    gap: 10px
+
+    &.is-today
+        border-color: var(--accent)
+        box-shadow: inset 0 0 0 1px var(--accent)
+
+.calendar-day-empty
+    background: transparent
+    border-style: dashed
+    min-height: 120px
+
+.calendar-day-number
+    font-size: 1.1rem
+    font-weight: 700
+
+.calendar-card
+    background: var(--card)
+    border: 1px solid var(--border)
+    border-radius: $radius-md
+    padding: 10px
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+.calendar-thumb-link
+    display: block
+
+.calendar-thumb
+    width: 100%
+    aspect-ratio: 5 / 4
+    object-fit: cover
+    border-radius: $radius-sm
+    border: 1px solid var(--border)
+
+.calendar-meta
+    font-size: 0.9rem
+    word-break: break-word
+
+.calendar-empty-action,
+.calendar-no-entry
+    margin-top: auto
+    color: var(--muted)
+
+.gallery-grid
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr))
+    gap: 16px
+
+.gallery-card
+    background: var(--card-2)
+    border: 1px solid var(--border)
+    border-radius: $radius-lg
+    overflow: hidden
+    color: var(--text)
+    transition: transform $transition-default, border-color $transition-default
+
+    &:hover
+        text-decoration: none
+        transform: translateY(-2px)
+        border-color: var(--accent)
+
+    img
+        width: 100%
+        aspect-ratio: 5 / 4
+        object-fit: cover
+
+    span
+        display: block
+        padding: 12px
+        font-weight: 700
+
+.image-detail-grid
+    display: grid
+    grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr)
+    gap: 24px
+
+.image-stage,
+.image-meta-box,
+.edit-preview
+    background: var(--card-2)
+    border: 1px solid var(--border)
+    border-radius: $radius-xl
+    padding: 16px
+
+.main-image
+    width: 100%
+    border-radius: $radius-md
+    border: 1px solid var(--border)
+
+.meta-item
+    margin-bottom: 16px
+
+.tag-list
+    display: flex
+    flex-wrap: wrap
+    gap: 8px
+
+.tag-chip
+    display: inline-flex
+    align-items: center
+    padding: 6px 10px
+    border-radius: 999px
+    background: rgba(79, 140, 255, 0.12)
+    border: 1px solid rgba(79, 140, 255, 0.25)
+    color: var(--text)
+    font-size: 0.9rem
+
+.like-count
+    font-weight: 700
+
+.stats-grid
+    display: grid
+    grid-template-columns: repeat(3, minmax(0, 1fr))
+    gap: 16px
+
+.stat-card
+    background: var(--card-2)
+    border: 1px solid var(--border)
+    border-radius: $radius-xl
+    padding: 18px
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+.stat-label
+    color: var(--muted)
+    font-size: 0.95rem
+
+.stat-value
+    font-size: 1.4rem
+
+.stat-note
+    color: var(--muted)
+    font-size: 0.92rem
+
+.edit-preview
+    max-width: 420px
+    margin-bottom: 18px
+
+    img
+        width: 100%
+        border-radius: $radius-sm
+
+@media (max-width: 1180px)
+    .calendar-grid,
+    .calendar-header
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+
+    .calendar-weekday:nth-child(n + 3)
+        display: none
+
+    .calendar-day-empty
+        display: none
+
+@media (max-width: 920px)
+    .image-detail-grid,
+    .stats-grid,
+    .filter-bar,
+    .form-grid
+        grid-template-columns: 1fr
+
+    .header-inner,
+    .panel-header,
+    .calendar-nav
+        flex-direction: column
+        align-items: stretch
+
+@media (max-width: 640px)
+    .container
+        width: min(100% - 20px, 100%)
+
+    .panel
+        padding: 16px
+        border-radius: $radius-lg
+
+    .calendar-grid,
+    .calendar-header
+        grid-template-columns: 1fr
+
+    .calendar-weekday
+        display: none
