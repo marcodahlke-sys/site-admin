@@ -11,6 +11,20 @@ class Image extends BaseModel
         return $image ?: null;
     }
 
+    public function countAll(): int
+    {
+        return (int) $this->pdo->query('SELECT COUNT(*) FROM vup_dateien')->fetchColumn();
+    }
+
+    public function countByCategory(int $categoryId): int
+    {
+        $sql = 'SELECT COUNT(*) FROM vup_dateien WHERE ' . $this->categoryFilterSql('vup_dateien', $categoryId);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
     public function getByMonth(int $month, int $year, ?int $categoryId = null): array
     {
         $start = mktime(0, 0, 0, $month, 1, $year);
@@ -23,21 +37,17 @@ class Image extends BaseModel
         ];
 
         if ($categoryId !== null) {
-            $conditions = ['to_kat = :categoryId'];
+            $sql .= ' AND (' . $this->categoryFilterSql('vup_dateien', $categoryId) . ')';
             $params['categoryId'] = $categoryId;
-
-            $map = category_field_map();
-            if (isset($map[$categoryId])) {
-                $conditions[] = $map[$categoryId] . ' = "1"';
-            }
-
-            $sql .= ' AND (' . implode(' OR ', $conditions) . ')';
         }
 
         $sql .= ' ORDER BY entrytime ASC';
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
+        }
+        $stmt->execute();
 
         return $stmt->fetchAll();
     }
@@ -48,26 +58,97 @@ class Image extends BaseModel
         $params = [];
 
         if ($categoryId !== null) {
-            $conditions = ['to_kat = :categoryId'];
+            $sql .= ' WHERE (' . $this->categoryFilterSql('vup_dateien', $categoryId) . ')';
             $params['categoryId'] = $categoryId;
-
-            $map = category_field_map();
-            if (isset($map[$categoryId])) {
-                $conditions[] = $map[$categoryId] . ' = "1"';
-            }
-
-            $sql .= ' WHERE (' . implode(' OR ', $conditions) . ')';
         }
 
         $sql .= ' ORDER BY entrytime DESC LIMIT :limit';
 
         $stmt = $this->pdo->prepare($sql);
+        if (isset($params['categoryId'])) {
+            $stmt->bindValue(':categoryId', $params['categoryId'], PDO::PARAM_INT);
+        }
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
 
-        foreach ($params as $key => $value) {
-            $stmt->bindValue(':' . $key, $value, PDO::PARAM_INT);
+        return $stmt->fetchAll();
+    }
+
+    public function countTimeline(?int $categoryId = null, string $search = ''): int
+    {
+        $sql = 'SELECT COUNT(DISTINCT v.id)
+                FROM vup_dateien v
+                LEFT JOIN vup_kategorien c ON c.id = v.to_kat
+                LEFT JOIN beschreibung1 b ON b.id = v.id
+                LEFT JOIN tags t ON t.bid = v.id
+                WHERE 1=1';
+
+        if ($categoryId !== null) {
+            $sql .= ' AND (' . $this->categoryFilterSql('v', $categoryId) . ')';
+        }
+
+        if ($search !== '') {
+            $sql .= ' AND (
+                v.name LIKE :term
+                OR c.name LIKE :term
+                OR b.beschreibung LIKE :term
+                OR t.tag LIKE :term
+            )';
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+
+        if ($categoryId !== null) {
+            $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+        }
+
+        if ($search !== '') {
+            $stmt->bindValue(':term', '%' . $search . '%', PDO::PARAM_STR);
+        }
+
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
+    public function timelinePaged(int $offset, int $limit, ?int $categoryId = null, string $search = ''): array
+    {
+        $sql = 'SELECT DISTINCT
+                    v.*,
+                    c.name AS category_name,
+                    b.beschreibung
+                FROM vup_dateien v
+                LEFT JOIN vup_kategorien c ON c.id = v.to_kat
+                LEFT JOIN beschreibung1 b ON b.id = v.id
+                LEFT JOIN tags t ON t.bid = v.id
+                WHERE 1=1';
+
+        if ($categoryId !== null) {
+            $sql .= ' AND (' . $this->categoryFilterSql('v', $categoryId) . ')';
+        }
+
+        if ($search !== '') {
+            $sql .= ' AND (
+                v.name LIKE :term
+                OR c.name LIKE :term
+                OR b.beschreibung LIKE :term
+                OR t.tag LIKE :term
+            )';
+        }
+
+        $sql .= ' ORDER BY v.entrytime DESC LIMIT :limit OFFSET :offset';
+
+        $stmt = $this->pdo->prepare($sql);
+
+        if ($categoryId !== null) {
+            $stmt->bindValue(':categoryId', $categoryId, PDO::PARAM_INT);
+        }
+
+        if ($search !== '') {
+            $stmt->bindValue(':term', '%' . $search . '%', PDO::PARAM_STR);
         }
 
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetchAll();
@@ -272,5 +353,17 @@ class Image extends BaseModel
         }
 
         return array_values(array_unique($result));
+    }
+
+    private function categoryFilterSql(string $tableAlias, int $categoryId): string
+    {
+        $conditions = [$tableAlias . '.to_kat = :categoryId'];
+
+        $map = category_field_map();
+        if (isset($map[$categoryId])) {
+            $conditions[] = $tableAlias . '.' . $map[$categoryId] . ' = "1"';
+        }
+
+        return implode(' OR ', $conditions);
     }
 }

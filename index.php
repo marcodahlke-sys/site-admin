@@ -9,6 +9,7 @@ $router = new App\Core\Router();
 
 $router->get('/', ['HomeController', 'index']);
 $router->get('/bild', ['HomeController', 'show']);
+$router->get('/timeline-feed', ['HomeController', 'timelineFeed']);
 $router->post('/like', ['LikeController', 'toggle']);
 
 $router->get('/admin/login', ['AuthController', 'loginForm']);

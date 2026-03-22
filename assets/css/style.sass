@@ -105,7 +105,8 @@ img
     display: block
 
 .container
-    width: min(1380px, calc(100% - 32px))
+    width: calc(100% - 28px)
+    max-width: none
     margin: 0 auto
 
 .site-shell
@@ -145,7 +146,7 @@ img
     flex-wrap: wrap
 
 .site-main
-    padding: 24px 0 50px
+    padding: 18px 0 50px
 
 .panel
     +panel-box
@@ -156,6 +157,83 @@ img
     max-width: 520px
     margin-left: auto
     margin-right: auto
+
+.hero-strip
+    padding: 2px 0 10px
+
+    h1
+        margin: 0 0 6px
+        font-size: 1.45rem
+
+    p
+        margin: 0
+        color: var(--muted)
+
+.nav-search-row
+    margin-top: 10px
+    margin-bottom: 18px
+    display: flex
+    gap: 12px
+    align-items: center
+    justify-content: space-between
+    flex-wrap: wrap
+
+.link-nav,
+.navline
+    display: flex
+    gap: 8px
+    flex-wrap: wrap
+    align-items: center
+    flex: 1 1 auto
+
+    a
+        display: inline-block
+        padding: 6px 10px
+        border: 1px solid var(--border)
+        background: var(--card)
+        border-radius: 6px
+        color: var(--accent)
+        text-decoration: none
+        font-size: 0.95rem
+
+        &.active,
+        &.is-active
+            font-weight: 700
+            background: rgba(79, 140, 255, 0.22)
+            color: var(--text)
+
+.searchbar
+    display: flex
+    gap: 8px
+    align-items: center
+    justify-content: flex-end
+    flex: 0 0 auto
+
+    input
+        width: 220px
+        min-width: 220px
+        min-height: 36px
+        padding: 0 10px
+        border: 1px solid var(--border)
+        border-radius: 6px
+        background: var(--card-2)
+        color: var(--text)
+        font: inherit
+
+    button
+        display: inline-flex
+        align-items: center
+        justify-content: center
+        min-height: 36px
+        padding: 6px 10px
+        border: 1px solid var(--border)
+        border-radius: 6px
+        background: rgba(79, 140, 255, 0.22)
+        color: var(--text)
+        font: inherit
+        font-size: 0.95rem
+        font-weight: 700
+        cursor: pointer
 
 .panel-header
     display: flex
@@ -189,10 +267,22 @@ img
         margin: 0
         color: var(--muted)
 
+.timeline-page-head
+    margin-bottom: 14px
+
+    h2
+        margin: 0 0 6px
+        font-size: 1.85rem
+
+    p
+        margin: 0
+        color: var(--muted)
+
 .panel-actions,
 .form-actions,
 .filter-actions,
-.admin-actions
+.admin-actions,
+.entry-actions
     display: flex
     gap: 10px
     flex-wrap: wrap
@@ -402,6 +492,112 @@ textarea
         padding: 12px
         font-weight: 700
 
+.timeline
+    position: relative
+    display: grid
+    gap: 24px
+    margin-top: 8px
+
+    &::before
+        content: ''
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 170px
+        width: 4px
+        border-radius: 999px
+        background: linear-gradient(180deg, rgba(29, 103, 188, 0.55) 0%, rgba(255, 165, 0, 0.45) 100%)
+
+.timeline-item
+    display: grid
+    grid-template-columns: 150px 20px minmax(0, 1fr)
+    gap: 20px
+    align-items: start
+    position: relative
+
+.timeline-date
+    display: flex
+    justify-content: flex-end
+    padding-top: 10px
+
+.date-badge
+    display: inline-block
+    padding: 4px 8px
+    background: rgba(79, 140, 255, 0.16)
+    color: var(--text)
+    border-radius: 999px
+    font-size: 0.8rem
+    font-weight: 700
+    margin-bottom: 8px
+
+.timeline-dot
+    width: 20px
+    height: 20px
+    border-radius: 999px
+    background: linear-gradient(180deg, #1d67bc 0%, orange 100%)
+    border: 3px solid #fff
+    box-shadow: 0 0 0 3px rgba(29, 103, 188, 0.18)
+    margin-top: 10px
+    z-index: 1
+
+.timeline-card
+    background: var(--card-2)
+    border: 1px solid var(--border)
+    border-radius: 24px
+    overflow: hidden
+    box-shadow: var(--shadow)
+
+.timeline-card-inner
+    display: grid
+    grid-template-columns: 280px minmax(0, 1fr)
+    gap: 16px
+    padding: 16px
+
+.timeline-thumb-link
+    display: block
+
+.timeline-thumb
+    width: 100%
+    aspect-ratio: 16 / 10
+    object-fit: cover
+    border-radius: 20px
+    background: var(--bg-soft)
+
+.timeline-content
+    min-width: 0
+
+.timeline-title
+    margin: 0
+    line-height: 1.3
+    font-size: 1.3rem
+
+    a
+        color: var(--text)
+        text-decoration: none
+
+        &:hover
+            text-decoration: underline
+
+.timeline-category-text
+    margin-top: 6px
+
+.timeline-desc
+    margin-top: 10px
+    color: var(--muted)
+    line-height: 1.55
+
+.timeline-actions
+    margin-top: 14px
+
+.timeline-status
+    margin-top: 18px
+    text-align: center
+    color: var(--muted)
+
+#timelineSentinel
+    width: 100%
+    height: 1px
+
 .image-detail-grid
     display: grid
     grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr)
@@ -474,6 +670,42 @@ textarea
         width: 100%
         border-radius: $radius-sm
 
+.slideshow-list
+    display: flex
+    flex-direction: column
+    gap: 14px
+
+.slideshow-card
+    display: grid
+    grid-template-columns: minmax(280px, 420px) 1fr
+    gap: 18px
+    align-items: start
+    padding: 16px
+    border: 1px solid var(--border)
+    border-radius: $radius-lg
+    background: var(--card-2)
+
+.entry-date
+    color: var(--muted)
+    font-weight: 700
+
+.slideshow-image img
+    width: 100%
+    aspect-ratio: 5 / 4
+    object-fit: cover
+    border-radius: $radius-md
+    border: 1px solid var(--border)
+
+.slideshow-meta h3
+    margin: 0 0 10px
+    font-size: 1.15rem
+
+.empty-state
+    padding: 18px
+    border: 1px dashed var(--border)
+    border-radius: $radius-md
+    color: var(--muted)
+
 @media (max-width: 1180px)
     .calendar-grid,
     .calendar-header
@@ -498,9 +730,34 @@ textarea
         flex-direction: column
         align-items: stretch
 
+    .timeline::before
+        left: 10px
+
+    .timeline-item
+        grid-template-columns: 20px minmax(0, 1fr)
+        gap: 14px
+
+    .timeline-date
+        grid-column: 2
+        justify-content: flex-start
+        padding-top: 0
+        margin-bottom: -4px
+
+    .timeline-dot
+        grid-column: 1
+        grid-row: 1 / span 2
+        margin-top: 6px
+
+    .timeline-card
+        grid-column: 2
+
+    .timeline-card-inner,
+    .slideshow-card
+        grid-template-columns: 1fr
+
 @media (max-width: 640px)
     .container
-        width: min(100% - 20px, 100%)
+        width: calc(100% - 20px)
 
     .panel
         padding: 16px
@@ -512,3 +769,16 @@ textarea
 
     .calendar-weekday
         display: none
+
+    .searchbar
+        width: 100%
+
+        input
+            width: 100%
+            min-width: 0
+
+    .link-nav,
+    .navline
+        overflow-x: auto
+        flex-wrap: nowrap
+        padding-bottom: 4px

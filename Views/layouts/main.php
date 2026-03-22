@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $isAdminArea = str_starts_with(request_path(), '/admin');
 $currentUser = app()->auth()->user();
+$imageCount = $imageCount ?? null;
 ?>
 <!doctype html>
 <html lang="de" data-theme="dark">
@@ -15,26 +16,37 @@ $currentUser = app()->auth()->user();
 <body>
 <div class="site-shell">
     <header class="site-header">
-        <div class="container header-inner">
-            <div>
-                <a class="brand" href="<?= e(url()) ?>">Bilder-Webseite</a>
-                <div class="brand-subline">User- und Admin-Bereich</div>
+        <div class="container header-inner<?= $isAdminArea ? ' admin-header' : '' ?>">
+            <div class="brand-wrap">
+                <a class="brand" href="<?= e(url()) ?>">Bing bilder</a>
+                <div class="brand-subline">Bing Hintergründe<?= $imageCount !== null ? ' · ' . (int) $imageCount . ' Bilder' : '' ?></div>
             </div>
 
             <nav class="main-nav">
-                <a href="<?= e(url()) ?>">Userbereich</a>
-                <?php if ($currentUser): ?>
+                <?php if ($isAdminArea): ?>
+                    <a href="<?= e(url()) ?>">Startseite</a>
                     <a href="<?= e(url('admin')) ?>">Admin</a>
-                    <form method="post" action="<?= e(url('admin/logout')) ?>" class="inline-form">
-                        <?= csrf_field() ?>
-                        <button type="submit" class="btn btn-small">Logout</button>
-                    </form>
+                    <?php if ($currentUser): ?>
+                        <form method="post" action="<?= e(url('admin/logout')) ?>" class="inline-form">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="btn btn-small">Logout</button>
+                        </form>
+                    <?php else: ?>
+                        <a href="<?= e(url('admin/login')) ?>">Admin Login</a>
+                    <?php endif; ?>
                 <?php else: ?>
-                    <a href="<?= e(url('admin/login')) ?>">Admin Login</a>
-                <?php endif; ?>
+                    <span class="nav-counter"><?= $imageCount !== null ? (int) $imageCount . ' Bilder' : 'Galerie' ?></span>
+                    <button type="button" class="theme-toggle" id="darkmode-toggle" aria-label="Farbschema umschalten">☀</button>
 
-                <?php if (!$isAdminArea): ?>
-                    <button type="button" class="btn btn-small" id="darkmode-toggle">Darkmode</button>
+                    <?php if ($currentUser): ?>
+                        <a href="<?= e(url('admin')) ?>">Admin</a>
+                        <form method="post" action="<?= e(url('admin/logout')) ?>" class="inline-form">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="btn btn-small">Logout</button>
+                        </form>
+                    <?php else: ?>
+                        <a href="<?= e(url('admin/login')) ?>">Admin Login</a>
+                    <?php endif; ?>
                 <?php endif; ?>
             </nav>
         </div>
@@ -58,16 +70,16 @@ $currentUser = app()->auth()->user();
 
     const button = document.getElementById('darkmode-toggle');
     if (button) {
-        const updateText = () => {
-            button.textContent = root.getAttribute('data-theme') === 'light' ? 'Darkmode' : 'Lightmode';
+        const updateIcon = () => {
+            button.textContent = root.getAttribute('data-theme') === 'light' ? '☾' : '☀';
         };
-        updateText();
+        updateIcon();
 
         button.addEventListener('click', function () {
             const current = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
             root.setAttribute('data-theme', current);
             localStorage.setItem(key, current);
-            updateText();
+            updateIcon();
         });
     }
 })();
