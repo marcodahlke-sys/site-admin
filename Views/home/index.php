@@ -22,7 +22,7 @@ $nextYear = $month === 12 ? $year + 1 : $year;
         </div>
     </div>
 
-    <form method="get" action="/" class="filter-bar">
+    <form method="get" action="<?= e(url()) ?>" class="filter-bar">
         <div class="field">
             <label for="kat">Kategorie</label>
             <select id="kat" name="kat">
@@ -51,16 +51,16 @@ $nextYear = $month === 12 ? $year + 1 : $year;
 
         <div class="filter-actions">
             <button type="submit" class="btn">Filtern</button>
-            <a class="btn btn-secondary" href="/">Zurücksetzen</a>
+            <a class="btn btn-secondary" href="<?= e(url()) ?>">Zurücksetzen</a>
         </div>
     </form>
 </section>
 
 <section class="panel">
     <div class="calendar-nav">
-        <a class="btn btn-small" href="/<?= ltrim(preserve_query(['monat' => $prevMonth, 'jahr' => $prevYear]), '?') ?>">← Vorheriger Monat</a>
+        <a class="btn btn-small" href="<?= e(url() . preserve_query(['monat' => $prevMonth, 'jahr' => $prevYear])) ?>">← Vorheriger Monat</a>
         <h2><?= e(german_month_name($month)) ?> <?= (int) $year ?></h2>
-        <a class="btn btn-small" href="/<?= ltrim(preserve_query(['monat' => $nextMonth, 'jahr' => $nextYear]), '?') ?>">Nächster Monat →</a>
+        <a class="btn btn-small" href="<?= e(url() . preserve_query(['monat' => $nextMonth, 'jahr' => $nextYear])) ?>">Nächster Monat →</a>
     </div>
 
     <?= $calendar ?>
@@ -77,7 +77,7 @@ $nextYear = $month === 12 ? $year + 1 : $year;
     <div class="gallery-grid">
         <?php foreach ($latest as $image): ?>
             <?php create_thumbnail_if_needed((string) $image['name']); ?>
-            <a class="gallery-card" href="/bild?id=<?= (int) $image['id'] ?>">
+            <a class="gallery-card" href="<?= e(url('bild') . '?id=' . (int) $image['id']) ?>">
                 <img src="<?= e(thumb_url((string) $image['name'])) ?>" alt="<?= e((string) $image['name']) ?>">
                 <span><?= e(date('d.m.Y', (int) $image['entrytime'])) ?></span>
             </a>

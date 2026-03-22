@@ -17,20 +17,20 @@ $currentUser = app()->auth()->user();
     <header class="site-header">
         <div class="container header-inner">
             <div>
-                <a class="brand" href="/">Bilder-Webseite</a>
+                <a class="brand" href="<?= e(url()) ?>">Bilder-Webseite</a>
                 <div class="brand-subline">User- und Admin-Bereich</div>
             </div>
 
             <nav class="main-nav">
-                <a href="/">Userbereich</a>
+                <a href="<?= e(url()) ?>">Userbereich</a>
                 <?php if ($currentUser): ?>
-                    <a href="/admin">Admin</a>
-                    <form method="post" action="/admin/logout" class="inline-form">
+                    <a href="<?= e(url('admin')) ?>">Admin</a>
+                    <form method="post" action="<?= e(url('admin/logout')) ?>" class="inline-form">
                         <?= csrf_field() ?>
                         <button type="submit" class="btn btn-small">Logout</button>
                     </form>
                 <?php else: ?>
-                    <a href="/admin/login">Admin Login</a>
+                    <a href="<?= e(url('admin/login')) ?>">Admin Login</a>
                 <?php endif; ?>
 
                 <?php if (!$isAdminArea): ?>

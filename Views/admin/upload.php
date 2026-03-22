@@ -19,7 +19,7 @@ $extraSelected = old('extra_categories', []);
         </div>
     </div>
 
-    <form method="post" action="/admin/upload" enctype="multipart/form-data" class="form-grid">
+    <form method="post" action="<?= e(url('admin/upload')) ?>" enctype="multipart/form-data" class="form-grid">
         <?= csrf_field() ?>
 
         <div class="field">
@@ -75,7 +75,7 @@ $extraSelected = old('extra_categories', []);
 
         <div class="form-actions">
             <button type="submit" class="btn">Hochladen</button>
-            <a class="btn btn-secondary" href="/admin">Abbrechen</a>
+            <a class="btn btn-secondary" href="<?= e(url('admin')) ?>">Abbrechen</a>
         </div>
     </form>
 </section>

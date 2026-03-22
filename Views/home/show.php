@@ -18,7 +18,7 @@ create_thumbnail_if_needed((string) $image['name']);
             <p><?= e((string) $image['name']) ?></p>
         </div>
         <div class="panel-actions">
-            <a class="btn btn-secondary" href="/">Zurück zur Übersicht</a>
+            <a class="btn btn-secondary" href="<?= e(url()) ?>">Zurück zur Übersicht</a>
         </div>
     </div>
 
@@ -56,10 +56,10 @@ create_thumbnail_if_needed((string) $image['name']);
                 <?= (int) $likes ?>
             </div>
 
-            <form method="post" action="/like">
+            <form method="post" action="<?= e(url('like')) ?>">
                 <?= csrf_field() ?>
                 <input type="hidden" name="image_id" value="<?= (int) $image['id'] ?>">
-                <input type="hidden" name="redirect_to" value="/bild?id=<?= (int) $image['id'] ?>">
+                <input type="hidden" name="redirect_to" value="<?= e('bild?id=' . (int) $image['id']) ?>">
                 <button type="submit" class="btn"><?= $liked ? 'Like entfernen' : 'Like setzen' ?></button>
             </form>
         </div>

@@ -27,7 +27,7 @@ class Controller
 
     protected function redirect(string $path): void
     {
-        header('Location: ' . $path);
+        header('Location: ' . url($path));
         exit;
     }
 
@@ -35,7 +35,7 @@ class Controller
     {
         if (!$this->auth->check()) {
             $this->session->flash('error', 'Bitte zuerst einloggen.');
-            $this->redirect('/admin/login');
+            $this->redirect('admin/login');
         }
     }
 }

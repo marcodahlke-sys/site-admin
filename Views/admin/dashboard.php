@@ -21,7 +21,7 @@ $nextYear = $month === 12 ? $year + 1 : $year;
             <p>Willkommen, <?= e((string) ($user['name'] ?? 'Admin')) ?></p>
         </div>
         <div class="panel-actions">
-            <a class="btn" href="/admin/upload">Neues Bild hochladen</a>
+            <a class="btn" href="<?= e(url('admin/upload')) ?>">Neues Bild hochladen</a>
         </div>
     </div>
 
@@ -48,9 +48,9 @@ $nextYear = $month === 12 ? $year + 1 : $year;
 
 <section class="panel">
     <div class="calendar-nav">
-        <a class="btn btn-small" href="/admin?monat=<?= $prevMonth ?>&jahr=<?= $prevYear ?>">← Vorheriger Monat</a>
+        <a class="btn btn-small" href="<?= e(url('admin') . '?monat=' . $prevMonth . '&jahr=' . $prevYear) ?>">← Vorheriger Monat</a>
         <h2><?= e(german_month_name($month)) ?> <?= (int) $year ?></h2>
-        <a class="btn btn-small" href="/admin?monat=<?= $nextMonth ?>&jahr=<?= $nextYear ?>">Nächster Monat →</a>
+        <a class="btn btn-small" href="<?= e(url('admin') . '?monat=' . $nextMonth . '&jahr=' . $nextYear) ?>">Nächster Monat →</a>
     </div>
 
     <?= $calendar ?>

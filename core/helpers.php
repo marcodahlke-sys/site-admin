@@ -79,9 +79,43 @@ function request_method(): string
     return strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 }
 
-function request_path(): string
+function request_uri_path(): string
 {
     return parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+}
+
+function base_path_web(): string
+{
+    static $basePath = null;
+
+    if ($basePath !== null) {
+        return $basePath;
+    }
+
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+    $scriptDir = str_replace('\\', '/', dirname($scriptName));
+
+    if ($scriptDir === '/' || $scriptDir === '\\' || $scriptDir === '.') {
+        $basePath = '';
+        return $basePath;
+    }
+
+    $basePath = rtrim($scriptDir, '/');
+    return $basePath;
+}
+
+function request_path(): string
+{
+    $path = request_uri_path();
+    $base = base_path_web();
+
+    if ($base !== '' && str_starts_with($path, $base)) {
+        $path = substr($path, strlen($base));
+    }
+
+    $path = '/' . ltrim((string) $path, '/');
+
+    return $path === '' ? '/' : $path;
 }
 
 function input(string $key, mixed $default = null): mixed
@@ -94,15 +128,27 @@ function query(string $key, mixed $default = null): mixed
     return $_GET[$key] ?? $default;
 }
 
+function url(string $path = ''): string
+{
+    $base = base_path_web();
+    $path = ltrim($path, '/');
+
+    if ($path === '') {
+        return $base !== '' ? $base . '/' : '/';
+    }
+
+    return ($base !== '' ? $base : '') . '/' . $path;
+}
+
 function redirect(string $path): never
 {
-    header('Location: ' . $path);
+    header('Location: ' . url($path));
     exit;
 }
 
 function asset(string $path): string
 {
-    return '/' . ltrim($path, '/');
+    return url($path);
 }
 
 function now(): int
@@ -156,12 +202,12 @@ function thumbs_path(string $file = ''): string
 
 function image_url(string $file): string
 {
-    return '/uploads/' . rawurlencode($file);
+    return url('uploads/' . rawurlencode($file));
 }
 
 function thumb_url(string $file): string
 {
-    return '/thumbs/' . rawurlencode($file);
+    return url('thumbs/' . rawurlencode($file));
 }
 
 function create_thumbnail_if_needed(string $filename): void
@@ -302,5 +348,7 @@ function preserve_query(array $replace = []): string
             $query[$key] = $value;
         }
     }
-    return '?' . http_build_query($query);
+
+    $qs = http_build_query($query);
+    return $qs !== '' ? '?' . $qs : '';
 }

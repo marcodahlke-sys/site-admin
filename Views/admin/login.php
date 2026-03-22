@@ -17,7 +17,7 @@ declare(strict_types=1);
         </div>
     </div>
 
-    <form method="post" action="/admin/login" class="form-grid">
+    <form method="post" action="<?= e(url('admin/login')) ?>" class="form-grid">
         <?= csrf_field() ?>
 
         <div class="field">

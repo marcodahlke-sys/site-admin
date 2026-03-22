@@ -21,7 +21,7 @@ declare(strict_types=1);
         <img src="<?= e(thumb_url((string) $image['name'])) ?>" alt="<?= e((string) $image['name']) ?>">
     </div>
 
-    <form method="post" action="/admin/edit" class="form-grid">
+    <form method="post" action="<?= e(url('admin/edit')) ?>" class="form-grid">
         <?= csrf_field() ?>
         <input type="hidden" name="id" value="<?= (int) $image['id'] ?>">
 
@@ -72,7 +72,7 @@ declare(strict_types=1);
 
         <div class="form-actions">
             <button type="submit" class="btn">Speichern</button>
-            <a class="btn btn-secondary" href="/admin">Zurück</a>
+            <a class="btn btn-secondary" href="<?= e(url('admin')) ?>">Zurück</a>
         </div>
     </form>
 </section>

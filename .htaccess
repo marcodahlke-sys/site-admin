@@ -1,6 +1,7 @@
 Options -Indexes
 
 RewriteEngine On
+RewriteBase /
 
 # Nur .env schützen, .env_template soll erreichbar bleiben
 RewriteRule ^\.env$ - [F,L]
